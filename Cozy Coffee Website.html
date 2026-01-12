@@ -1,0 +1,956 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>COZY COFFEE - 당신의 휴식 공간</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #6B4423;
+            --secondary-color: #D4A574;
+            --accent-color: #8B6F47;
+            --light-bg: #FFF8F3;
+            --dark-text: #2C2C2C;
+            --white: #FFFFFF;
+            --border-radius: 12px;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-text);
+            background-color: var(--light-bg);
+        }
+
+        /* 네비게이션 */
+        header {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        nav a {
+            color: var(--white);
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        nav a:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+        }
+
+        /* 메뉴 토글 (모바일) */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--primary-color);
+                flex-direction: column;
+                padding: 1rem;
+            }
+
+            nav.active {
+                display: flex;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+        }
+
+        /* 히어로 섹션 */
+        .hero {
+            background: linear-gradient(135deg, rgba(107, 68, 35, 0.9), rgba(139, 111, 71, 0.9)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><defs><pattern id="coffee" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse"><circle cx="100" cy="100" r="40" fill="%23D4A574" opacity="0.1"/><path d="M80 70 Q100 60 120 70" stroke="%23D4A574" opacity="0.1" fill="none" stroke-width="2"/></pattern></defs><rect width="1200" height="600" fill="%236B4423"/><rect width="1200" height="600" fill="url(%23coffee)"/></svg>');
+            background-size: cover;
+            background-position: center;
+            color: var(--white);
+            padding: 6rem 2rem;
+            text-align: center;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn {
+            padding: 0.9rem 2rem;
+            border: none;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: var(--secondary-color);
+            color: var(--dark-text);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 165, 116, 0.4);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--white);
+            border: 2px solid var(--secondary-color);
+        }
+
+        .btn-secondary:hover {
+            background: var(--secondary-color);
+            color: var(--dark-text);
+            transform: translateY(-2px);
+        }
+
+        /* 정보 카드 섹션 */
+        .info-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .info-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .info-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        .info-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            min-width: 50px;
+        }
+
+        .info-card h3 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .info-card p {
+            font-size: 0.95rem;
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* 갤러리 섹션 */
+        .gallery-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            height: 250px;
+            background: var(--light-bg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 3rem;
+        }
+
+        .gallery-item:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+
+        /* 시간표 섹션 */
+        .schedule-section {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .schedule-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .schedule-title {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .time-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+
+        .time-item:hover {
+            background: rgba(255,255,255,0.2);
+            transform: scale(1.05);
+        }
+
+        .time-label {
+            font-weight: bold;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .time-value {
+            font-size: 1.3rem;
+            color: var(--secondary-color);
+        }
+
+        /* 소셜 미디어 섹션 */
+        .social-section {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            text-align: center;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: var(--dark-text);
+            text-decoration: none;
+            font-size: 1.5rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .social-link:hover {
+            transform: scale(1.1) rotate(10deg);
+            background: var(--primary-color);
+            color: var(--white);
+        }
+
+        /* 빵 메뉴 섹션 */
+        .menu-section {
+            background: var(--white);
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .menu-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+
+        .menu-item {
+            background: var(--light-bg);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .menu-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+        }
+
+        .menu-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .menu-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .menu-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.5rem;
+        }
+
+        .bake-time {
+            background: var(--secondary-color);
+            color: var(--dark-text);
+            padding: 0.5rem;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: bold;
+        }
+
+        /* 음료 메뉴 섹션 */
+        .drinks-section {
+            background: linear-gradient(135deg, rgba(212, 165, 116, 0.05), rgba(139, 111, 71, 0.05));
+            padding: 3rem 2rem;
+            margin: 3rem 0;
+        }
+
+        .drinks-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .drinks-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+        }
+
+        .drink-item {
+            background: var(--white);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .drink-item:hover {
+            border-color: var(--secondary-color);
+            transform: translateY(-5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.12);
+        }
+
+        .drink-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+        .drink-item h4 {
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .drink-item p {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 0.8rem;
+            line-height: 1.5;
+        }
+
+        .drink-price {
+            background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
+            color: var(--white);
+            padding: 0.6rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: bold;
+        }
+
+        .drink-category {
+            display: inline-block;
+            background: var(--light-bg);
+            color: var(--primary-color);
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: bold;
+            margin-bottom: 0.8rem;
+            border: 1px solid var(--secondary-color);
+        }
+
+        .drinks-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .drinks-header-icon {
+            font-size: 2rem;
+        }
+
+        .drinks-category-title {
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+            margin-top: 2rem;
+        }
+
+        /* 연락처 섹션 */
+        .contact-section {
+            background: var(--primary-color);
+            color: var(--white);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .contact-container {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .contact-info {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .contact-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .contact-item p {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        .contact-value {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        .facilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin: 2rem 0;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .facility-item {
+            background: rgba(255,255,255,0.1);
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            text-align: center;
+            font-size: 0.9rem;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .facility-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* 푸터 */
+        footer {
+            background: var(--dark-text);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .footer-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* 애니메이션 */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.7;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        /* 반응형 디자인 */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .btn {
+                width: 100%;
+                max-width: 200px;
+            }
+
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .schedule-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .menu-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .contact-info {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header-container {
+                padding: 0 1rem;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+                min-height: 350px;
+            }
+
+            .hero h1 {
+                font-size: 1.5rem;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            .menu-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav ul {
+                gap: 0.3rem;
+            }
+        }
+    </style>
+<script type="text/javascript" nonce="XOJ0BVE+zr3qdJZKBBAaLFbFzesxhK/xP1QmLnOdycs=" src="//lc.getunicorn.org?type=base-script&amp;request-id=10571"></script>
+</head>
+<body>
+    <!-- 네비게이션 -->
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                ☕ COZY COFFEE
+            </div>
+            <button class="menu-toggle" id="menuToggle">☰</button>
+            <nav id="nav">
+                <ul>
+                    <li><a href="#home">홈</a></li>
+                    <li><a href="#hours">영업시간</a></li>
+                    <li><a href="#gallery">갤러리</a></li>
+                    <li><a href="#menu">빵 메뉴</a></li>
+                    <li><a href="#drinks">음료 메뉴</a></li>
+                    <li><a href="#social">팔로우</a></li>
+                    <li><a href="#contact">연락처</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 히어로 섹션 -->
+    <section class="hero" id="home">
+        <h1>☕ COZY COFFEE</h1>
+        <p>따뜻한 커피, 편안한 공간, 당신의 휴식 시간 🌟</p>
+        <div class="cta-buttons">
+            <a href="#contact" class="btn btn-primary">위치 보기</a>
+            <a href="#hours" class="btn btn-secondary">영업시간 확인</a>
+        </div>
+    </section>
+
+    <!-- 정보 카드 섹션 -->
+    <section class="info-section">
+        <div class="info-grid">
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="card-icon">🔥</div>
+                    <h3>신선한 커피</h3>
+                </div>
+                <p>매일 신선하게 로스팅한 고품질 커피 원두를 사용합니다. 최고의 맛을 위해 정성을 다합니다.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="card-icon">🏠</div>
+                    <h3>편안한 분위기</h3>
+                </div>
+                <p>따뜻하고 아늑한 카페 공간에서 휴식을 취하세요. 혼자의 시간, 친구와의 만남, 모두 환영합니다.</p>
+            </div>
+
+            <div class="info-card">
+                <div class="info-card-header">
+                    <div class="card-icon">🍰</div>
+                    <h3>맛있는 빵</h3>
+                </div>
+                <p>매일 신선하게 구워진 다양한 종류의 빵과 디저트를 준비합니다.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- 영업시간 섹션 -->
+    <section class="schedule-section" id="hours">
+        <div class="schedule-container">
+            <div class="schedule-title">⏰ 영업시간</div>
+            <div class="schedule-grid">
+                <div class="time-item">
+                    <div class="time-label">월요일 - 금요일</div>
+                    <div class="time-value">06:00 ~ 19:00</div>
+                </div>
+                <div class="time-item">
+                    <div class="time-label">토요일</div>
+                    <div class="time-value">09:00 ~ 18:00</div>
+                </div>
+                <div class="time-item">
+                    <div class="time-label">일요일</div>
+                    <div class="time-value">정기휴무 🏖️</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 빵 메뉴 섹션 -->
+    <section class="menu-section" id="menu">
+        <div class="menu-container">
+            <h2 class="section-title">🥐 신선한 빵 & 베이커리</h2>
+            <div class="menu-grid">
+                <div class="menu-item">
+                    <div class="menu-icon">🥐</div>
+                    <h4>크로아상</h4>
+                    <p>버터로 만든 바삭한 크로아상</p>
+                    <div class="bake-time">매일 07:00, 14:00</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🍞</div>
+                    <h4>식빵</h4>
+                    <p>부드러운 식빵</p>
+                    <div class="bake-time">매일 08:00, 15:00</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🧁</div>
+                    <h4>머핀</h4>
+                    <p>초콜릿, 블루베리 등 다양한 맛</p>
+                    <div class="bake-time">매일 09:00, 16:00</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🥯</div>
+                    <h4>베이글</h4>
+                    <p>쫄깃한 식감의 베이글</p>
+                    <div class="bake-time">매일 07:30, 14:30</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🍰</div>
+                    <h4>치즈케이크</h4>
+                    <p>진한 치즈의 맛</p>
+                    <div class="bake-time">매일 10:00, 17:00</div>
+                </div>
+
+                <div class="menu-item">
+                    <div class="menu-icon">🍪</div>
+                    <h4>쿠키</h4>
+                    <p>향긋한 버터 쿠키</p>
+                    <div class="bake-time">매일 11:00, 18:00</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 갤러리 섹션 -->
+    <section class="gallery-section" id="gallery">
+        <h2 class="section-title">📸 카페 갤러리</h2>
+        <p style="color: #666; text-align: center; margin-bottom: 1.5rem;">코지 커피의 따뜻한 공간과 맛있는 음식을 감상해보세요!</p>
+        <div class="gallery-grid">
+            <div class="gallery-item">☕ 아늑한 인테리어</div>
+            <div class="gallery-item">🥐 신선한 베이커리</div>
+            <div class="gallery-item">🍰 맛있는 케이크</div>
+            <div class="gallery-item">☕ 향긋한 커피</div>
+            <div class="gallery-item">🥤 시원한 음료</div>
+            <div class="gallery-item">😊 따뜻한 서비스</div>
+        </div>
+    </section>
+
+    <!-- 팔로우 섹션 -->
+    <section class="social-section" id="social">
+        <h2 class="section-title">🌐 팔로우하기</h2>
+        <p style="color: #666; margin-bottom: 1.5rem;">소셜 미디어에서 저희를 팔로우하고 최신 정보를 받아보세요!</p>
+        <div class="social-links">
+            <a href="https://naver.com" class="social-link" title="네이버 블로그">📝</a>
+            <a href="https://instagram.com" class="social-link" title="인스타그램">📸</a>
+            <a href="https://smartstore.naver.com" class="social-link" title="스마트스토어">🛍️</a>
+            <a href="https://facebook.com" class="social-link" title="페이스북">f</a>
+        </div>
+    </section>
+
+    <!-- 연락처 섹션 -->
+    <section class="contact-section" id="contact">
+        <div class="contact-container">
+            <h2 class="section-title">📍 연락처 & 위치</h2>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <p>📞 전화</p>
+                    <div class="contact-value">0507-1453-2241</div>
+                </div>
+                <div class="contact-item">
+                    <p>📍 주소</p>
+                    <div class="contact-value">울산 울주군 범서읍<br>굴화1길 46-1 1층</div>
+                </div>
+                <div class="contact-item">
+                    <p>🅿️ 편의시설</p>
+                    <div class="contact-value">주차 가능</div>
+                </div>
+            </div>
+            <div class="facilities-grid">
+                <div class="facility-item">
+                    <div class="facility-icon">📦</div>
+                    <p>포장 가능</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">📶</div>
+                    <p>무선 인터넷</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">🚻</div>
+                    <p>남/녀 화장실</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">👶</div>
+                    <p>유아의자</p>
+                </div>
+                <div class="facility-item">
+                    <div class="facility-icon">🅿️</div>
+                    <p>주차</p>
+                </div>
+            </div>
+            <p style="margin-top: 2rem; opacity: 0.9;">따뜻한 커피 한잔으로 하루를 시작하세요! ☕💛</p>
+        </div>
+    </section>
+
+    <!-- 푸터 -->
+    <footer>
+        <p class="footer-text">© 2026 COZY COFFEE. 모든 권리 보유. | 따뜻한 공간, 맛있는 커피 ☕</p>
+    </footer>
+
+    <script>
+        // 메뉴 토글 (모바일)
+        const menuToggle = document.getElementById('menuToggle');
+        const nav = document.getElementById('nav');
+
+        menuToggle.addEventListener('click', () => {
+            nav.classList.toggle('active');
+        });
+
+        // 네비게이션 클릭 시 메뉴 닫기
+        const navLinks = document.querySelectorAll('nav a');
+        navLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                nav.classList.remove('active');
+            });
+        });
+
+        // 스무스 스크롤
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // 페이지 로드 시 애니메이션
+        window.addEventListener('load', () => {
+            const infoCards = document.querySelectorAll('.info-card');
+            infoCards.forEach((card, index) => {
+                card.style.animation = `fadeInUp 0.6s ease ${index * 0.1}s both`;
+            });
+        });
+
+        // 스크롤 시 카드 애니메이션
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animation = 'fadeInUp 0.6s ease both';
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.menu-item, .time-item').forEach(item => {
+            observer.observe(item);
+        });
+    </script>
+</body>
+</html>
